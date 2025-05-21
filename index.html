@@ -1,101 +1,566 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <title>Ouverture de Parchemin Mystère</title>
-  <style>
-    body { background: #23272a; color: #fff; font-family: Arial, sans-serif; text-align: center; }
-    #roulette-container { width: 600px; margin: 60px auto 0; overflow: hidden; border: 5px solid #FFD700; border-radius: 16px; background: #2c2f33; position: relative; }
-    #roulette { display: flex; transition: transform 0.2s; }
-    .item { width: 120px; flex-shrink: 0; margin: 16px 8px; background: #444; border-radius: 10px; box-shadow: 0 2px 8px #0008; text-align: center; }
-    .item img { width: 64px; height: 64px; margin-top: 10px; }
-    .item-name { margin: 10px 0 16px; font-weight: bold; }
-    #center-bar {
-      position: absolute; top: 0; bottom: 0; left: 50%; width: 4px; background: #FFD700; transform: translateX(-50%);
-      box-shadow: 0 0 12px #FFD700, 0 0 24px #FFD70088;
-      z-index: 2;
-    }
-    #result { font-size: 1.5em; margin-top: 30px; color: #FFD700; min-height: 2em; }
-    button { padding: 14px 36px; font-size: 1.2em; margin-top: 30px; border-radius: 8px; border: none; background: #FFD700; color: #222; cursor: pointer;}
-    button:active { background: #e6c200; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NobleAdventure - RPG Discord</title>
+    <style>
+        :root {
+            --primary: #7289da;
+            --secondary: #2c2f33;
+            --dark: #23272a;
+            --light: #ffffff;
+            --gold: #f1c40f;
+            --silver: #95a5a6;
+            --bronze: #cd7f32;
+            --green: #2ecc71;
+            --purple: #9b59b6;
+            --red: #e74c3c;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--dark);
+            color: var(--light);
+            line-height: 1.6;
+        }
+
+        header {
+            background-color: var(--secondary);
+            padding: 1rem;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        nav {
+            background-color: var(--secondary);
+            display: flex;
+            justify-content: center;
+            padding: 0.5rem;
+        }
+
+        nav a {
+            color: var(--light);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            margin: 0 0.5rem;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        nav a:hover {
+            background-color: var(--primary);
+        }
+
+        main {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+            text-align: center;
+        }
+
+        .scrolls-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .scroll-card {
+            background-color: var(--secondary);
+            border-radius: 10px;
+            padding: 1.5rem;
+            width: 250px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s;
+            cursor: pointer;
+        }
+
+        .scroll-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .scroll-common {
+            border: 2px solid var(--silver);
+        }
+
+        .scroll-rare {
+            border: 2px solid var(--purple);
+        }
+
+        .scroll-epic {
+            border: 2px solid var(--gold);
+        }
+
+        .scroll-legendary {
+            border: 2px solid var(--red);
+            background: linear-gradient(135deg, var(--secondary) 0%, #3a2c4a 100%);
+        }
+
+        .scroll-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .scroll-title {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .scroll-price {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+        }
+
+        .scroll-btn {
+            background-color: var(--primary);
+            color: var(--light);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s;
+        }
+
+        .scroll-btn:hover {
+            background-color: #5e77d4;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 100;
+            overflow: hidden;
+        }
+
+        .modal-content {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .items-container {
+            display: flex;
+            position: absolute;
+            transition: transform 0.5s ease-out;
+        }
+
+        .reward-item {
+            width: 200px;
+            height: 250px;
+            margin: 0 1rem;
+            background-color: var(--secondary);
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            opacity: 0.5;
+            transition: opacity 0.3s, transform 0.3s;
+        }
+
+        .reward-item.active {
+            opacity: 1;
+            transform: scale(1.2);
+            z-index: 10;
+        }
+
+        .item-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .item-name {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            text-align: center;
+        }
+
+        .item-rarity {
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .common {
+            color: var(--silver);
+        }
+
+        .rare {
+            color: var(--purple);
+        }
+
+        .epic {
+            color: var(--gold);
+        }
+
+        .legendary {
+            color: var(--red);
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 2rem;
+            color: var(--light);
+            cursor: pointer;
+            z-index: 101;
+        }
+
+        .modal-result {
+            position: absolute;
+            bottom: 50px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-size: 1.5rem;
+            color: var(--gold);
+            text-shadow: 0 0 10px rgba(241, 196, 15, 0.7);
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+
+        .coins-balance {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: var(--secondary);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .coin-icon {
+            color: var(--gold);
+        }
+
+        footer {
+            background-color: var(--secondary);
+            text-align: center;
+            padding: 2rem 1rem;
+            margin-top: 3rem;
+        }
+
+        @media (max-width: 768px) {
+            .scrolls-container {
+                gap: 1rem;
+            }
+
+            .scroll-card {
+                width: 200px;
+            }
+        }
+    </style>
 </head>
 <body>
-  <h1>🎲 Ouvre ton Parchemin Mystère !</h1>
-  <div id="roulette-container">
-    <div id="center-bar"></div>
-    <div id="roulette"></div>
-  </div>
-  <button id="openBtn" onclick="startRoulette()">Ouvrir</button>
-  <div id="result"></div>
+    <header>
+        <div class="logo">NobleAdventure</div>
+        <p>Une aventure épique vous attend sur Discord!</p>
+    </header>
 
-  <script>
-    // Mets tes propres images ici !
-    const rewards = [
-      { name: "Potion de Vie", img: "https://i.imgur.com/7yZ3FQp.png" },
-      { name: "Potion de Mana", img: "https://i.imgur.com/1Q9Z1Zm.png" },
-      { name: "Épée Rare", img: "https://i.imgur.com/6QKqK7F.png" },
-      { name: "Couronne Légendaire", img: "https://i.imgur.com/8QwQK7F.png" },
-      { name: "Bouclier Antique", img: "https://i.imgur.com/4QwQK7F.png" },
-      { name: "Anneau Magique", img: "https://i.imgur.com/3QwQK7F.png" }
-    ];
+    <nav>
+        <a href="#parchemins">Parchemins</a>
+        <a href="#inventaire">Inventaire</a>
+        <a href="#quetes">Quêtes</a>
+        <a href="#classement">Classement</a>
+    </nav>
 
-    // Génère une longue séquence d'items pour l'effet roulette
-    function generateSequence() {
-      let sequence = [];
-      for (let i = 0; i < 30; i++) {
-        sequence.push(rewards[Math.floor(Math.random() * rewards.length)]);
-      }
-      return sequence;
-    }
+    <div class="coins-balance">
+        <span class="coin-icon">💰</span>
+        <span id="coins-amount">5000</span> pièces
+    </div>
 
-    function renderRoulette(sequence) {
-      const roulette = document.getElementById('roulette');
-      roulette.innerHTML = '';
-      for (const reward of sequence) {
-        const item = document.createElement('div');
-        item.className = 'item';
-        item.innerHTML = `<img src="${reward.img}" alt=""><div class="item-name">${reward.name}</div>`;
-        roulette.appendChild(item);
-      }
-    }
+    <main>
+        <section class="hero">
+            <h1>Bienvenue dans l'univers de NobleAdventure</h1>
+            <p>Explorez des donjons, combattez des monstres, et collectionnez des objets rares dans ce RPG Discord captivant. Utilisez vos pièces pour acheter des parchemins magiques et découvrez ce qu'ils contiennent!</p>
+        </section>
 
-    function startRoulette() {
-      document.getElementById('result').textContent = '';
-      document.getElementById('openBtn').disabled = true;
+        <section id="parchemins">
+            <h2 class="section-title">Parchemins Magiques</h2>
+            <div class="scrolls-container">
+                <div class="scroll-card scroll-common">
+                    <div class="scroll-icon">📜</div>
+                    <h3 class="scroll-title">Parchemin Commun</h3>
+                    <p class="scroll-price">500 pièces</p>
+                    <button class="scroll-btn" data-price="500" data-type="common">Acheter</button>
+                </div>
 
-      const sequence = generateSequence();
-      renderRoulette(sequence);
+                <div class="scroll-card scroll-rare">
+                    <div class="scroll-icon">📜✨</div>
+                    <h3 class="scroll-title">Parchemin Rare</h3>
+                    <p class="scroll-price">1000 pièces</p>
+                    <button class="scroll-btn" data-price="1000" data-type="rare">Acheter</button>
+                </div>
 
-      const itemWidth = 136; // 120px + 2*8px margin
-      const visibleItems = 5;
-      const centerIndex = Math.floor(visibleItems / 2);
+                <div class="scroll-card scroll-epic">
+                    <div class="scroll-icon">📜🌟</div>
+                    <h3 class="scroll-title">Parchemin Épique</h3>
+                    <p class="scroll-price">2000 pièces</p>
+                    <button class="scroll-btn" data-price="2000" data-type="epic">Acheter</button>
+                </div>
 
-      // Position initiale : début de la séquence
-      const roulette = document.getElementById('roulette');
-      roulette.style.transition = 'none';
-      roulette.style.transform = `translateX(0px)`;
+                <div class="scroll-card scroll-legendary">
+                    <div class="scroll-icon">📜🔥</div>
+                    <h3 class="scroll-title">Parchemin Légendaire</h3>
+                    <p class="scroll-price">3500 pièces</p>
+                    <button class="scroll-btn" data-price="3500" data-type="legendary">Acheter</button>
+                </div>
+            </div>
+        </section>
+    </main>
 
-      // Choix du résultat final
-      const resultIndex = Math.floor(sequence.length / 2) + Math.floor(Math.random() * (sequence.length / 3));
-      const finalOffset = -(resultIndex - centerIndex) * itemWidth;
+    <div id="scroll-modal" class="modal">
+        <div class="close-modal">&times;</div>
+        <div class="modal-content">
+            <div class="items-container" id="items-container">
+                <!-- Les items seront générés dynamiquement par JavaScript -->
+            </div>
+            <div class="modal-result" id="modal-result"></div>
+        </div>
+    </div>
 
-      // Animation
-      setTimeout(() => {
-        roulette.style.transition = 'transform 3.2s cubic-bezier(.17,.67,.83,.67)';
-        roulette.style.transform = `translateX(${finalOffset}px)`;
-      }, 100);
+    <footer>
+        <p>NobleAdventure RPG &copy; 2025 - Un jeu de rôle sur Discord</p>
+        <p>Rejoignez-nous sur Discord pour commencer votre aventure !</p>
+    </footer>
 
-      // Affiche le résultat après l'animation
-      setTimeout(() => {
-        const reward = sequence[resultIndex];
-        document.getElementById('result').textContent = `🎉 Tu as gagné : ${reward.name} !`;
-        document.getElementById('openBtn').disabled = false;
-      }, 3400);
-    }
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const modal = document.getElementById('scroll-modal');
+            const itemsContainer = document.getElementById('items-container');
+            const modalResult = document.getElementById('modal-result');
+            const closeModalBtn = document.querySelector('.close-modal');
+            const coinsDisplay = document.getElementById('coins-amount');
+            let coins = parseInt(coinsDisplay.textContent);
+            let currentlyAnimating = false;
 
-    // Affichage initial
-    renderRoulette(generateSequence());
-  </script>
+            // Données pour les récompenses possibles
+            const rewards = {
+                common: [
+                    { name: "Potion de Soin", rarity: "common", icon: "🧪" },
+                    { name: "Épée en Fer", rarity: "common", icon: "🗡️" },
+                    { name: "Cuir", rarity: "common", icon: "🥬" },
+                    { name: "Herbes", rarity: "common", icon: "🌿" },
+                    { name: "Bois", rarity: "common", icon: "🪵" },
+                    { name: "Pierre", rarity: "common", icon: "🪨" },
+                    { name: "Potion de Mana", rarity: "common", icon: "🧪" },
+                    { name: "Arc Simple", rarity: "common", icon: "🏹" }
+                ],
+                rare: [
+                    { name: "Épée d'Acier", rarity: "rare", icon: "⚔️" },
+                    { name: "Potion de Force", rarity: "rare", icon: "💪" },
+                    { name: "Armure en Acier", rarity: "rare", icon: "🛡️" },
+                    { name: "Gemme Bleue", rarity: "rare", icon: "💎" },
+                    { name: "Grimoire", rarity: "rare", icon: "📕" },
+                    { name: "Baguette Magique", rarity: "rare", icon: "🪄" }
+                ],
+                epic: [
+                    { name: "Épée de Feu", rarity: "epic", icon: "🔥" },
+                    { name: "Amulette de Protection", rarity: "epic", icon: "📿" },
+                    { name: "Arbalète Enchantée", rarity: "epic", icon: "🏹✨" },
+                    { name: "Casque du Dragon", rarity: "epic", icon: "🐉" },
+                    { name: "Marteau de Thor", rarity: "epic", icon: "🔨" }
+                ],
+                legendary: [
+                    { name: "Excalibur", rarity: "legendary", icon: "⚔️✨" },
+                    { name: "Armure Divine", rarity: "legendary", icon: "🛡️✨" },
+                    { name: "Couronne du Roi", rarity: "legendary", icon: "👑" },
+                    { name: "Œuf de Dragon", rarity: "legendary", icon: "🥚" },
+                    { name: "Orbe d'Éternité", rarity: "legendary", icon: "🔮" }
+                ]
+            };
+
+            // Fonction pour acheter un parchemin
+            document.querySelectorAll('.scroll-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    if (currentlyAnimating) return;
+                    
+                    const price = parseInt(this.getAttribute('data-price'));
+                    const type = this.getAttribute('data-type');
+                    
+                    if (coins >= price) {
+                        coins -= price;
+                        coinsDisplay.textContent = coins;
+                        openScroll(type);
+                    } else {
+                        alert("Vous n'avez pas assez de pièces!");
+                    }
+                });
+            });
+
+            // Fonction pour ouvrir un parchemin
+            function openScroll(type) {
+                if (currentlyAnimating) return;
+                currentlyAnimating = true;
+                
+                // Vider le conteneur
+                itemsContainer.innerHTML = '';
+                
+                // Déterminer les récompenses possibles en fonction du type
+                let possibleRewards = [];
+                
+                switch(type) {
+                    case 'common':
+                        possibleRewards = [...rewards.common];
+                        break;
+                    case 'rare':
+                        possibleRewards = [...rewards.common, ...rewards.rare];
+                        break;
+                    case 'epic':
+                        possibleRewards = [...rewards.common, ...rewards.rare, ...rewards.epic];
+                        break;
+                    case 'legendary':
+                        possibleRewards = [...rewards.common, ...rewards.rare, ...rewards.epic, ...rewards.legendary];
+                        break;
+                }
+                
+                // Mélanger les récompenses
+                shuffleArray(possibleRewards);
+                
+                // Sélectionner quelques récompenses
+                const selectedRewards = possibleRewards.slice(0, 7);
+                
+                // Ajouter une récompense garantie en fonction du type
+                let guaranteedReward = null;
+                if (type === 'rare') {
+                    guaranteedReward = rewards.rare[Math.floor(Math.random() * rewards.rare.length)];
+                } else if (type === 'epic') {
+                    guaranteedReward = rewards.epic[Math.floor(Math.random() * rewards.epic.length)];
+                } else if (type === 'legendary') {
+                    guaranteedReward = rewards.legendary[Math.floor(Math.random() * rewards.legendary.length)];
+                }
+                
+                if (guaranteedReward) {
+                    selectedRewards[3] = guaranteedReward; // Remplacer l'élément du milieu
+                }
+                
+                // Ajouter les éléments au DOM
+                selectedRewards.forEach((reward, index) => {
+                    const itemElement = document.createElement('div');
+                    itemElement.className = `reward-item ${index === 0 ? 'active' : ''}`;
+                    itemElement.innerHTML = `
+                        <div class="item-icon">${reward.icon}</div>
+                        <div class="item-name">${reward.name}</div>
+                        <div class="item-rarity ${reward.rarity}">${capitalizeFirstLetter(reward.rarity)}</div>
+                    `;
+                    itemsContainer.appendChild(itemElement);
+                });
+                
+                // Ouvrir la modale
+                modal.style.display = 'block';
+                
+                // Animer le défilement
+                let currentIndex = 0;
+                const totalItems = selectedRewards.length;
+                const itemWidth = 240; // largeur de l'item + marge
+                
+                // Position initiale
+                itemsContainer.style.transform = `translateX(${window.innerWidth / 2 - itemWidth / 2}px)`;
+                
+                // Animation de défilement
+                const scrollAnimation = setInterval(() => {
+                    currentIndex++;
+                    
+                    // Mettre à jour la classe active
+                    document.querySelectorAll('.reward-item').forEach((item, idx) => {
+                        item.classList.remove('active');
+                        if (idx === currentIndex) {
+                            item.classList.add('active');
+                        }
+                    });
+                    
+                    // Déplacer les items
+                    itemsContainer.style.transform = `translateX(${(window.innerWidth / 2) - (itemWidth / 2) - (currentIndex * itemWidth)}px)`;
+                    
+                    // Arrêter l'animation au milieu (item 3)
+                    if (currentIndex === 3) {
+                        clearInterval(scrollAnimation);
+                        
+                        // Afficher le résultat
+                        modalResult.textContent = `Vous avez obtenu: ${selectedRewards[3].name}!`;
+                        modalResult.style.opacity = 1;
+                        
+                        setTimeout(() => {
+                            currentlyAnimating = false;
+                        }, 1000);
+                    }
+                }, 300);
+            }
+
+            // Fermer la modale
+            closeModalBtn.addEventListener('click', function() {
+                if (currentlyAnimating) return;
+                modal.style.display = 'none';
+                modalResult.style.opacity = 0;
+            });
+
+            // Utilitaires
+            function shuffleArray(array) {
+                for (let i = array.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [array[i], array[j]] = [array[j], array[i]];
+                }
+                return array;
+            }
+
+            function capitalizeFirstLetter(string) {
+                return string.charAt(0).toUpperCase() + string.slice(1);
+            }
+        });
+    </script>
 </body>
 </html>
