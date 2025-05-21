@@ -3,564 +3,471 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NobleAdventure - RPG Discord</title>
+    <title>NobleAdventure - Le Bot RPG pour Discord</title>
     <style>
         :root {
-            --primary: #7289da;
-            --secondary: #2c2f33;
-            --dark: #23272a;
-            --light: #ffffff;
-            --gold: #f1c40f;
-            --silver: #95a5a6;
-            --bronze: #cd7f32;
-            --green: #2ecc71;
-            --purple: #9b59b6;
-            --red: #e74c3c;
+            --primary: #7851a9;
+            --secondary: #ff9944;
+            --dark: #1a1a2e;
+            --light: #f8f8ff;
+            --accent: #2c698d;
         }
-
+        
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-
+        
         body {
             background-color: var(--dark);
             color: var(--light);
-            line-height: 1.6;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23332244' fill-opacity='0.15'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
         }
-
+        
         header {
-            background-color: var(--secondary);
-            padding: 1rem;
+            background: linear-gradient(rgba(26, 26, 46, 0.8), rgba(26, 26, 46, 0.8)), url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='400' viewBox='0 0 800 400'%3E%3Cpath fill='%233d1c5a' fill-opacity='0.2' d='M0 0h800v400H0z'/%3E%3Cpath fill='%23ffffff' fill-opacity='0.05' d='M0 50h800M0 100h800M0 150h800M0 200h800M0 250h800M0 300h800M0 350h800'/%3E%3Cpath fill='%23ffffff' fill-opacity='0.02' d='M50 0v400M100 0v400M150 0v400M200 0v400M250 0v400M300 0v400M350 0v400M400 0v400M450 0v400M500 0v400M550 0v400M600 0v400M650 0v400M700 0v400M750 0v400'/%3E%3C/svg%3E");
+            padding: 5rem 1rem;
             text-align: center;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-        }
-
-        .logo {
-            font-size: 2rem;
-            font-weight: bold;
-            color: var(--primary);
-            margin-bottom: 0.5rem;
-        }
-
-        nav {
-            background-color: var(--secondary);
-            display: flex;
-            justify-content: center;
-            padding: 0.5rem;
-        }
-
-        nav a {
             color: var(--light);
-            text-decoration: none;
-            padding: 0.5rem 1rem;
-            margin: 0 0.5rem;
-            border-radius: 5px;
-            transition: background-color 0.3s;
-        }
-
-        nav a:hover {
-            background-color: var(--primary);
-        }
-
-        main {
-            max-width: 1200px;
-            margin: 2rem auto;
-            padding: 0 1rem;
-        }
-
-        .hero {
-            text-align: center;
-            margin-bottom: 3rem;
-        }
-
-        .hero h1 {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-            color: var(--primary);
-        }
-
-        .hero p {
-            font-size: 1.2rem;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .section-title {
-            font-size: 2rem;
-            margin-bottom: 1.5rem;
-            color: var(--primary);
-            text-align: center;
-        }
-
-        .scrolls-container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 2rem;
-            margin-bottom: 3rem;
-        }
-
-        .scroll-card {
-            background-color: var(--secondary);
-            border-radius: 10px;
-            padding: 1.5rem;
-            width: 250px;
-            text-align: center;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-            transition: transform 0.3s;
-            cursor: pointer;
-        }
-
-        .scroll-card:hover {
-            transform: translateY(-10px);
-        }
-
-        .scroll-common {
-            border: 2px solid var(--silver);
-        }
-
-        .scroll-rare {
-            border: 2px solid var(--purple);
-        }
-
-        .scroll-epic {
-            border: 2px solid var(--gold);
-        }
-
-        .scroll-legendary {
-            border: 2px solid var(--red);
-            background: linear-gradient(135deg, var(--secondary) 0%, #3a2c4a 100%);
-        }
-
-        .scroll-icon {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-        }
-
-        .scroll-title {
-            font-size: 1.5rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .scroll-price {
-            font-size: 1.2rem;
-            margin-bottom: 1rem;
-        }
-
-        .scroll-btn {
-            background-color: var(--primary);
-            color: var(--light);
-            border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 1rem;
-            transition: background-color 0.3s;
-        }
-
-        .scroll-btn:hover {
-            background-color: #5e77d4;
-        }
-
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.7);
-            z-index: 100;
-            overflow: hidden;
-        }
-
-        .modal-content {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
             position: relative;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
             overflow: hidden;
         }
-
-        .items-container {
-            display: flex;
-            position: absolute;
-            transition: transform 0.5s ease-out;
+        
+        .hero-content {
+            position: relative;
+            z-index: 1;
         }
-
-        .reward-item {
-            width: 200px;
-            height: 250px;
-            margin: 0 1rem;
-            background-color: var(--secondary);
-            border-radius: 10px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 1rem;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-            opacity: 0.5;
-            transition: opacity 0.3s, transform 0.3s;
-        }
-
-        .reward-item.active {
-            opacity: 1;
-            transform: scale(1.2);
-            z-index: 10;
-        }
-
-        .item-icon {
-            font-size: 3rem;
+        
+        .hero-content h1 {
+            font-size: 3.5rem;
             margin-bottom: 1rem;
-        }
-
-        .item-name {
-            font-size: 1.2rem;
-            margin-bottom: 0.5rem;
-            text-align: center;
-        }
-
-        .item-rarity {
-            font-size: 0.9rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .common {
-            color: var(--silver);
-        }
-
-        .rare {
-            color: var(--purple);
-        }
-
-        .epic {
-            color: var(--gold);
-        }
-
-        .legendary {
-            color: var(--red);
-        }
-
-        .close-modal {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            font-size: 2rem;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+            letter-spacing: 2px;
+            font-weight: 800;
             color: var(--light);
-            cursor: pointer;
-            z-index: 101;
         }
-
-        .modal-result {
-            position: absolute;
-            bottom: 50px;
-            left: 0;
-            right: 0;
-            text-align: center;
+        
+        .hero-subtitle {
             font-size: 1.5rem;
-            color: var(--gold);
-            text-shadow: 0 0 10px rgba(241, 196, 15, 0.7);
-            opacity: 0;
-            transition: opacity 0.5s;
+            margin-bottom: 2rem;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
         }
-
-        .coins-balance {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background-color: var(--secondary);
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        
+        .btn {
+            display: inline-block;
+            padding: 1rem 2rem;
+            margin: 0.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
         }
-
-        .coin-icon {
-            color: var(--gold);
+        
+        .btn-primary {
+            background: var(--primary);
+            color: var(--light);
         }
-
-        footer {
-            background-color: var(--secondary);
+        
+        .btn-primary:hover {
+            background: #8a62ba;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+        }
+        
+        .btn-secondary {
+            background: var(--secondary);
+            color: #333;
+        }
+        
+        .btn-secondary:hover {
+            background: #ffac66;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .section {
+            padding: 4rem 0;
+            position: relative;
+        }
+        
+        .section-title {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
             text-align: center;
-            padding: 2rem 1rem;
+            color: var(--light);
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+            letter-spacing: 1px;
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
             margin-top: 3rem;
         }
-
-        @media (max-width: 768px) {
-            .scrolls-container {
-                gap: 1rem;
+        
+        .feature-card {
+            background: rgba(26, 26, 46, 0.8);
+            border-radius: 10px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(120, 81, 169, 0.3);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+            border-color: var(--primary);
+        }
+        
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            color: var(--secondary);
+        }
+        
+        .feature-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--light);
+        }
+        
+        .feature-description {
+            color: #ccc;
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+        
+        .screenshots {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .screenshot-card {
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .screenshot-card:hover {
+            transform: scale(1.03);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
+        }
+        
+        .screenshot-img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            display: block;
+            background-color: #333;
+        }
+        
+        .screenshot-caption {
+            padding: 1rem;
+            background: rgba(26, 26, 46, 0.9);
+            color: var(--light);
+            font-size: 1rem;
+        }
+        
+        .testimonials {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .testimonial-card {
+            background: rgba(26, 26, 46, 0.8);
+            border-radius: 10px;
+            padding: 2rem;
+            border: 1px solid rgba(120, 81, 169, 0.3);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+        
+        .testimonial-text {
+            font-style: italic;
+            margin-bottom: 1rem;
+            color: #ddd;
+            line-height: 1.6;
+        }
+        
+        .testimonial-author {
+            font-weight: bold;
+            color: var(--secondary);
+        }
+        
+        .cta {
+            background: linear-gradient(rgba(26, 26, 46, 0.9), rgba(26, 26, 46, 0.9)), url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='400' viewBox='0 0 800 400'%3E%3Cpath fill='%233d1c5a' fill-opacity='0.2' d='M0 0h800v400H0z'/%3E%3Cpath fill='%23ffffff' fill-opacity='0.05' d='M0 50h800M0 100h800M0 150h800M0 200h800M0 250h800M0 300h800M0 350h800'/%3E%3Cpath fill='%23ffffff' fill-opacity='0.02' d='M50 0v400M100 0v400M150 0v400M200 0v400M250 0v400M300 0v400M350 0v400M400 0v400M450 0v400M500 0v400M550 0v400M600 0v400M650 0v400M700 0v400M750 0v400'/%3E%3C/svg%3E");
+            text-align: center;
+            padding: 5rem 1rem;
+        }
+        
+        .cta-title {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--light);
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        }
+        
+        .cta-text {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto 2rem;
+            color: #ddd;
+        }
+        
+        footer {
+            background-color: rgba(26, 26, 46, 0.9);
+            padding: 2rem;
+            text-align: center;
+            color: #aaa;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .footer-link {
+            color: #ccc;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-link:hover {
+            color: var(--secondary);
+        }
+        
+        .divider {
+            width: 80%;
+            max-width: 800px;
+            height: 1px;
+            background: linear-gradient(to right, transparent, var(--primary), transparent);
+            margin: 4rem auto;
+        }
+        
+        .glow {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(120, 81, 169, 0.3) 0%, rgba(120, 81, 169, 0) 70%);
+            animation: float 8s infinite ease-in-out;
+        }
+        
+        .glow-1 {
+            top: -100px;
+            left: 10%;
+            animation-delay: 0s;
+        }
+        
+        .glow-2 {
+            bottom: -150px;
+            right: 20%;
+            animation-delay: 2s;
+        }
+        
+        .glow-3 {
+            top: 50%;
+            left: -100px;
+            animation-delay: 4s;
+        }
+        
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) scale(1);
             }
-
-            .scroll-card {
-                width: 200px;
+            50% {
+                transform: translateY(-20px) scale(1.1);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 1.2rem;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .btn {
+                padding: 0.8rem 1.5rem;
+                font-size: 1rem;
+            }
+            
+            .features, .screenshots, .testimonials {
+                grid-template-columns: 1fr;
             }
         }
     </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
 </head>
 <body>
     <header>
-        <div class="logo">NobleAdventure</div>
-        <p>Une aventure épique vous attend sur Discord!</p>
-    </header>
-
-    <nav>
-        <a href="#parchemins">Parchemins</a>
-        <a href="#inventaire">Inventaire</a>
-        <a href="#quetes">Quêtes</a>
-        <a href="#classement">Classement</a>
-    </nav>
-
-    <div class="coins-balance">
-        <span class="coin-icon">💰</span>
-        <span id="coins-amount">5000</span> pièces
-    </div>
-
-    <main>
-        <section class="hero">
-            <h1>Bienvenue dans l'univers de NobleAdventure</h1>
-            <p>Explorez des donjons, combattez des monstres, et collectionnez des objets rares dans ce RPG Discord captivant. Utilisez vos pièces pour acheter des parchemins magiques et découvrez ce qu'ils contiennent!</p>
-        </section>
-
-        <section id="parchemins">
-            <h2 class="section-title">Parchemins Magiques</h2>
-            <div class="scrolls-container">
-                <div class="scroll-card scroll-common">
-                    <div class="scroll-icon">📜</div>
-                    <h3 class="scroll-title">Parchemin Commun</h3>
-                    <p class="scroll-price">500 pièces</p>
-                    <button class="scroll-btn" data-price="500" data-type="common">Acheter</button>
-                </div>
-
-                <div class="scroll-card scroll-rare">
-                    <div class="scroll-icon">📜✨</div>
-                    <h3 class="scroll-title">Parchemin Rare</h3>
-                    <p class="scroll-price">1000 pièces</p>
-                    <button class="scroll-btn" data-price="1000" data-type="rare">Acheter</button>
-                </div>
-
-                <div class="scroll-card scroll-epic">
-                    <div class="scroll-icon">📜🌟</div>
-                    <h3 class="scroll-title">Parchemin Épique</h3>
-                    <p class="scroll-price">2000 pièces</p>
-                    <button class="scroll-btn" data-price="2000" data-type="epic">Acheter</button>
-                </div>
-
-                <div class="scroll-card scroll-legendary">
-                    <div class="scroll-icon">📜🔥</div>
-                    <h3 class="scroll-title">Parchemin Légendaire</h3>
-                    <p class="scroll-price">3500 pièces</p>
-                    <button class="scroll-btn" data-price="3500" data-type="legendary">Acheter</button>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <div id="scroll-modal" class="modal">
-        <div class="close-modal">&times;</div>
-        <div class="modal-content">
-            <div class="items-container" id="items-container">
-                <!-- Les items seront générés dynamiquement par JavaScript -->
-            </div>
-            <div class="modal-result" id="modal-result"></div>
+        <div class="glow glow-1"></div>
+        <div class="glow glow-2"></div>
+        <div class="hero-content">
+            <h1>NobleAdventure</h1>
+            <p class="hero-subtitle">Transformez votre serveur Discord en une épopée légendaire ! Un bot RPG interactif qui emmène vos membres dans des aventures palpitantes.</p>
+            <a href="#" class="btn btn-primary">Ajouter à Discord</a>
+            <a href="#features" class="btn btn-secondary">Découvrir</a>
         </div>
-    </div>
-
+    </header>
+    
+    <section id="features" class="section">
+        <div class="container">
+            <h2 class="section-title">Fonctionnalités Épiques</h2>
+            <div class="features">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-map-marked-alt"></i>
+                    </div>
+                    <h3 class="feature-title">Exploration de Mondes</h3>
+                    <p class="feature-description">Voyagez à travers des territoires mystérieux, découvrez des lieux cachés et déverrouillez de nouvelles zones au fil de vos aventures.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-dungeon"></i>
+                    </div>
+                    <h3 class="feature-title">Quêtes & Donjons</h3>
+                    <p class="feature-description">Affrontez des boss redoutables, accomplissez des quêtes épiques et explorez des donjons périlleux pour obtenir des récompenses légendaires.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-briefcase"></i>
+                    </div>
+                    <h3 class="feature-title">Inventaire & Objets</h3>
+                    <p class="feature-description">Gérez votre équipement, achetez et vendez des objets, utilisez des potions et ouvrez des parchemins mystérieux avec des animations captivantes.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-level-up-alt"></i>
+                    </div>
+                    <h3 class="feature-title">Progression du Personnage</h3>
+                    <p class="feature-description">Gagnez de l'expérience, montez en niveau, déverrouillez de nouvelles compétences et maîtrisez divers métiers pour devenir plus puissant.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-bed"></i>
+                    </div>
+                    <h3 class="feature-title">Repos Interactif</h3>
+                    <p class="feature-description">Choisissez votre lieu de repos, de l'humble auberge au luxueux manoir, avec des effets et des images personnalisées pour chaque endroit.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-dice"></i>
+                    </div>
+                    <h3 class="feature-title">Mini-jeux</h3>
+                    <p class="feature-description">Divertissez-vous avec une variété de mini-jeux pour gagner des bonus supplémentaires et animer votre aventure.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <div class="divider"></div>
+    
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title">Aperçu de l'Aventure</h2>
+            <div class="screenshots">
+                <div class="screenshot-card">
+                    <img src="/api/placeholder/400/320" alt="Écran d'exploration" class="screenshot-img">
+                    <div class="screenshot-caption">Explorez des territoires mystérieux et découvrez des trésors cachés</div>
+                </div>
+                
+                <div class="screenshot-card">
+                    <img src="/api/placeholder/400/320" alt="Combat de boss" class="screenshot-img">
+                    <div class="screenshot-caption">Affrontez des boss épiques avec des mécaniques uniques</div>
+                </div>
+                
+                <div class="screenshot-card">
+                    <img src="/api/placeholder/400/320" alt="Ouverture de parchemin mystère" class="screenshot-img">
+                    <div class="screenshot-caption">Ouvrez des parchemins mystères avec une animation captivante</div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <div class="divider"></div>
+    
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title">Ce que disent les Aventuriers</h2>
+            <div class="testimonials">
+                <div class="testimonial-card">
+                    <p class="testimonial-text">"NobleAdventure a complètement transformé notre serveur ! Les membres adorent explorer et progresser ensemble. C'est devenu notre activité préférée."</p>
+                    <p class="testimonial-author">- Eldrith, Maître de Guilde</p>
+                </div>
+                
+                <div class="testimonial-card">
+                    <p class="testimonial-text">"L'interface avec les boutons et menus est super intuitive. Les animations d'ouverture de parchemins sont addictives, je ne peux plus m'arrêter d'en ouvrir !"</p>
+                    <p class="testimonial-author">- Thalion, Chasseur de Trésors</p>
+                </div>
+                
+                <div class="testimonial-card">
+                    <p class="testimonial-text">"Les quêtes sont variées et les donjons vraiment challengeants. Notre communauté est plus active que jamais grâce à ce bot !"</p>
+                    <p class="testimonial-author">- Lyra, Mage Élémentaire</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <div class="divider"></div>
+    
+    <section class="section cta">
+        <div class="glow glow-3"></div>
+        <div class="container">
+            <h2 class="cta-title">Prêt à commencer l'aventure ?</h2>
+            <p class="cta-text">Ajoutez NobleAdventure à votre serveur Discord dès maintenant et offrez à votre communauté une expérience RPG inoubliable !</p>
+            <a href="#" class="btn btn-primary">Ajouter à Discord</a>
+            <a href="#" class="btn btn-secondary">Rejoindre le serveur support</a>
+        </div>
+    </section>
+    
     <footer>
-        <p>NobleAdventure RPG &copy; 2025 - Un jeu de rôle sur Discord</p>
-        <p>Rejoignez-nous sur Discord pour commencer votre aventure !</p>
+        <div class="footer-links">
+            <a href="#" class="footer-link">Accueil</a>
+            <a href="#" class="footer-link">Documentation</a>
+            <a href="#" class="footer-link">Support</a>
+            <a href="#" class="footer-link">Conditions d'utilisation</a>
+        </div>
+        <p>&copy; 2025 NobleAdventure - Tous droits réservés</p>
     </footer>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const modal = document.getElementById('scroll-modal');
-            const itemsContainer = document.getElementById('items-container');
-            const modalResult = document.getElementById('modal-result');
-            const closeModalBtn = document.querySelector('.close-modal');
-            const coinsDisplay = document.getElementById('coins-amount');
-            let coins = parseInt(coinsDisplay.textContent);
-            let currentlyAnimating = false;
-
-            // Données pour les récompenses possibles
-            const rewards = {
-                common: [
-                    { name: "Potion de Soin", rarity: "common", icon: "🧪" },
-                    { name: "Épée en Fer", rarity: "common", icon: "🗡️" },
-                    { name: "Cuir", rarity: "common", icon: "🥬" },
-                    { name: "Herbes", rarity: "common", icon: "🌿" },
-                    { name: "Bois", rarity: "common", icon: "🪵" },
-                    { name: "Pierre", rarity: "common", icon: "🪨" },
-                    { name: "Potion de Mana", rarity: "common", icon: "🧪" },
-                    { name: "Arc Simple", rarity: "common", icon: "🏹" }
-                ],
-                rare: [
-                    { name: "Épée d'Acier", rarity: "rare", icon: "⚔️" },
-                    { name: "Potion de Force", rarity: "rare", icon: "💪" },
-                    { name: "Armure en Acier", rarity: "rare", icon: "🛡️" },
-                    { name: "Gemme Bleue", rarity: "rare", icon: "💎" },
-                    { name: "Grimoire", rarity: "rare", icon: "📕" },
-                    { name: "Baguette Magique", rarity: "rare", icon: "🪄" }
-                ],
-                epic: [
-                    { name: "Épée de Feu", rarity: "epic", icon: "🔥" },
-                    { name: "Amulette de Protection", rarity: "epic", icon: "📿" },
-                    { name: "Arbalète Enchantée", rarity: "epic", icon: "🏹✨" },
-                    { name: "Casque du Dragon", rarity: "epic", icon: "🐉" },
-                    { name: "Marteau de Thor", rarity: "epic", icon: "🔨" }
-                ],
-                legendary: [
-                    { name: "Excalibur", rarity: "legendary", icon: "⚔️✨" },
-                    { name: "Armure Divine", rarity: "legendary", icon: "🛡️✨" },
-                    { name: "Couronne du Roi", rarity: "legendary", icon: "👑" },
-                    { name: "Œuf de Dragon", rarity: "legendary", icon: "🥚" },
-                    { name: "Orbe d'Éternité", rarity: "legendary", icon: "🔮" }
-                ]
-            };
-
-            // Fonction pour acheter un parchemin
-            document.querySelectorAll('.scroll-btn').forEach(button => {
-                button.addEventListener('click', function() {
-                    if (currentlyAnimating) return;
-                    
-                    const price = parseInt(this.getAttribute('data-price'));
-                    const type = this.getAttribute('data-type');
-                    
-                    if (coins >= price) {
-                        coins -= price;
-                        coinsDisplay.textContent = coins;
-                        openScroll(type);
-                    } else {
-                        alert("Vous n'avez pas assez de pièces!");
-                    }
-                });
-            });
-
-            // Fonction pour ouvrir un parchemin
-            function openScroll(type) {
-                if (currentlyAnimating) return;
-                currentlyAnimating = true;
-                
-                // Vider le conteneur
-                itemsContainer.innerHTML = '';
-                
-                // Déterminer les récompenses possibles en fonction du type
-                let possibleRewards = [];
-                
-                switch(type) {
-                    case 'common':
-                        possibleRewards = [...rewards.common];
-                        break;
-                    case 'rare':
-                        possibleRewards = [...rewards.common, ...rewards.rare];
-                        break;
-                    case 'epic':
-                        possibleRewards = [...rewards.common, ...rewards.rare, ...rewards.epic];
-                        break;
-                    case 'legendary':
-                        possibleRewards = [...rewards.common, ...rewards.rare, ...rewards.epic, ...rewards.legendary];
-                        break;
-                }
-                
-                // Mélanger les récompenses
-                shuffleArray(possibleRewards);
-                
-                // Sélectionner quelques récompenses
-                const selectedRewards = possibleRewards.slice(0, 7);
-                
-                // Ajouter une récompense garantie en fonction du type
-                let guaranteedReward = null;
-                if (type === 'rare') {
-                    guaranteedReward = rewards.rare[Math.floor(Math.random() * rewards.rare.length)];
-                } else if (type === 'epic') {
-                    guaranteedReward = rewards.epic[Math.floor(Math.random() * rewards.epic.length)];
-                } else if (type === 'legendary') {
-                    guaranteedReward = rewards.legendary[Math.floor(Math.random() * rewards.legendary.length)];
-                }
-                
-                if (guaranteedReward) {
-                    selectedRewards[3] = guaranteedReward; // Remplacer l'élément du milieu
-                }
-                
-                // Ajouter les éléments au DOM
-                selectedRewards.forEach((reward, index) => {
-                    const itemElement = document.createElement('div');
-                    itemElement.className = `reward-item ${index === 0 ? 'active' : ''}`;
-                    itemElement.innerHTML = `
-                        <div class="item-icon">${reward.icon}</div>
-                        <div class="item-name">${reward.name}</div>
-                        <div class="item-rarity ${reward.rarity}">${capitalizeFirstLetter(reward.rarity)}</div>
-                    `;
-                    itemsContainer.appendChild(itemElement);
-                });
-                
-                // Ouvrir la modale
-                modal.style.display = 'block';
-                
-                // Animer le défilement
-                let currentIndex = 0;
-                const totalItems = selectedRewards.length;
-                const itemWidth = 240; // largeur de l'item + marge
-                
-                // Position initiale
-                itemsContainer.style.transform = `translateX(${window.innerWidth / 2 - itemWidth / 2}px)`;
-                
-                // Animation de défilement
-                const scrollAnimation = setInterval(() => {
-                    currentIndex++;
-                    
-                    // Mettre à jour la classe active
-                    document.querySelectorAll('.reward-item').forEach((item, idx) => {
-                        item.classList.remove('active');
-                        if (idx === currentIndex) {
-                            item.classList.add('active');
-                        }
-                    });
-                    
-                    // Déplacer les items
-                    itemsContainer.style.transform = `translateX(${(window.innerWidth / 2) - (itemWidth / 2) - (currentIndex * itemWidth)}px)`;
-                    
-                    // Arrêter l'animation au milieu (item 3)
-                    if (currentIndex === 3) {
-                        clearInterval(scrollAnimation);
-                        
-                        // Afficher le résultat
-                        modalResult.textContent = `Vous avez obtenu: ${selectedRewards[3].name}!`;
-                        modalResult.style.opacity = 1;
-                        
-                        setTimeout(() => {
-                            currentlyAnimating = false;
-                        }, 1000);
-                    }
-                }, 300);
-            }
-
-            // Fermer la modale
-            closeModalBtn.addEventListener('click', function() {
-                if (currentlyAnimating) return;
-                modal.style.display = 'none';
-                modalResult.style.opacity = 0;
-            });
-
-            // Utilitaires
-            function shuffleArray(array) {
-                for (let i = array.length - 1; i > 0; i--) {
-                    const j = Math.floor(Math.random() * (i + 1));
-                    [array[i], array[j]] = [array[j], array[i]];
-                }
-                return array;
-            }
-
-            function capitalizeFirstLetter(string) {
-                return string.charAt(0).toUpperCase() + string.slice(1);
-            }
-        });
-    </script>
 </body>
 </html>
