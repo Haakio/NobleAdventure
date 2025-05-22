@@ -328,6 +328,208 @@
             
             .features, .screenshots, .testimonials {
                 grid-template-columns: 1fr;
+
+            /* Animation de parchemin Marvel */
+.scroll-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+    backdrop-filter: blur(5px);
+}
+
+.scroll-container {
+    position: relative;
+    width: 400px;
+    height: 600px;
+    perspective: 1000px;
+}
+
+.scroll {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, #d4af37, #f4e5a1, #d4af37);
+    border-radius: 10px;
+    position: relative;
+    transform-style: preserve-3d;
+    cursor: pointer;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+    border: 3px solid #8b7355;
+}
+
+.scroll::before {
+    content: '';
+    position: absolute;
+    top: -5px;
+    left: -5px;
+    right: -5px;
+    bottom: -5px;
+    background: linear-gradient(45deg, #ffd700, #ffed4e, #ffd700);
+    border-radius: 15px;
+    z-index: -1;
+    opacity: 0;
+    animation: scrollGlow 2s infinite alternate;
+}
+
+.scroll-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: #8b4513;
+    font-weight: bold;
+    font-size: 1.2rem;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.scroll-opening {
+    animation: scrollOpen 3s ease-in-out forwards;
+}
+
+.magic-particles {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.particle {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: #ffd700;
+    border-radius: 50%;
+    animation: particleFloat 2s infinite ease-in-out;
+}
+
+.reward-reveal {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 30px;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+    border: 2px solid #ffd700;
+    opacity: 0;
+}
+
+.reward-reveal.show {
+    animation: rewardReveal 1s ease-out forwards;
+}
+
+.reward-title {
+    font-size: 2rem;
+    margin-bottom: 15px;
+    color: #ffd700;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.reward-item {
+    font-size: 1.3rem;
+    margin: 10px 0;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    border-left: 4px solid #ffd700;
+}
+
+.close-btn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@keyframes scrollGlow {
+    0% { opacity: 0; }
+    100% { opacity: 0.7; }
+}
+
+@keyframes scrollOpen {
+    0% {
+        transform: rotateY(0deg) scale(1);
+    }
+    30% {
+        transform: rotateY(180deg) scale(1.1);
+    }
+    60% {
+        transform: rotateY(360deg) scale(1.2);
+        filter: brightness(2) saturate(2);
+    }
+    100% {
+        transform: rotateY(720deg) scale(0);
+        opacity: 0;
+    }
+}
+
+@keyframes particleFloat {
+    0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(-100px) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+@keyframes rewardReveal {
+    0% {
+        transform: translate(-50%, -50%) scale(0) rotateY(180deg);
+        opacity: 0;
+    }
+    50% {
+        transform: translate(-50%, -50%) scale(1.2) rotateY(90deg);
+        opacity: 0.8;
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(1) rotateY(0deg);
+        opacity: 1;
+    }
+}
+
+.scroll-trigger-btn {
+    background: linear-gradient(45deg, #d4af37, #f4e5a1);
+    color: #8b4513;
+    border: 2px solid #8b7355;
+    padding: 15px 30px;
+    border-radius: 25px;
+    font-weight: bold;
+    font-size: 1.1rem;
+    cursor: pointer;
+    margin: 20px;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.scroll-trigger-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(212, 175, 55, 0.3);
+    background: linear-gradient(45deg, #f4e5a1, #d4af37);
+}
+                
             }
         }
     </style>
@@ -468,6 +670,108 @@
             <a href="#" class="footer-link">Conditions d'utilisation</a>
         </div>
         <p>&copy; 2025 NobleAdventure - Tous droits réservés</p>
+
+        <!-- Animation de Parchemin Marvel -->
+<div id="scrollOverlay" class="scroll-overlay">
+    <div class="scroll-container">
+        <div id="magicScroll" class="scroll" onclick="openScroll()">
+            <div class="scroll-content">
+                <h3>📜 Parchemin Mystérieux</h3>
+                <p>Cliquez pour découvrir<br>votre récompense !</p>
+            </div>
+            <div class="magic-particles" id="particles"></div>
+        </div>
+        <div id="rewardReveal" class="reward-reveal">
+            <button class="close-btn" onclick="closeScroll()">&times;</button>
+            <div class="reward-title">🎉 Félicitations !</div>
+            <div class="reward-item">⚔️ Épée Légendaire +50 ATK</div>
+            <div class="reward-item">💎 100 Gemmes Mystiques</div>
+            <div class="reward-item">🏆 Titre : "Explorateur Noble"</div>
+        </div>
+    </div>
+</div>
+
+        <script>
+function showScroll() {
+    document.getElementById('scrollOverlay').style.display = 'flex';
+    createParticles();
+}
+
+function openScroll() {
+    const scroll = document.getElementById('magicScroll');
+    const reward = document.getElementById('rewardReveal');
+    
+    scroll.classList.add('scroll-opening');
+    
+    // Particules magiques
+    createMagicBurst();
+    
+    setTimeout(() => {
+        reward.classList.add('show');
+    }, 2000);
+}
+
+function closeScroll() {
+    const overlay = document.getElementById('scrollOverlay');
+    const scroll = document.getElementById('magicScroll');
+    const reward = document.getElementById('rewardReveal');
+    
+    overlay.style.display = 'none';
+    scroll.classList.remove('scroll-opening');
+    reward.classList.remove('show');
+}
+
+function createParticles() {
+    const container = document.getElementById('particles');
+    container.innerHTML = '';
+    
+    for (let i = 0; i < 20; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        particle.style.left = Math.random() * 100 + '%';
+        particle.style.top = Math.random() * 100 + '%';
+        particle.style.animationDelay = Math.random() * 2 + 's';
+        container.appendChild(particle);
+    }
+}
+
+function createMagicBurst() {
+    const container = document.getElementById('particles');
+    
+    for (let i = 0; i < 50; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        particle.style.left = '50%';
+        particle.style.top = '50%';
+        particle.style.background = ['#ffd700', '#ff6b6b', '#4ecdc4', '#45b7d1'][Math.floor(Math.random() * 4)];
+        particle.style.animationDuration = (Math.random() * 2 + 1) + 's';
+        
+        const angle = (Math.PI * 2 * i) / 50;
+        const distance = Math.random() * 200 + 100;
+        particle.style.transform = `translate(${Math.cos(angle) * distance}px, ${Math.sin(angle) * distance}px)`;
+        
+        container.appendChild(particle);
+        
+        setTimeout(() => {
+            particle.remove();
+        }, 3000);
+    }
+}
+
+// Fermer avec Escape
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        closeScroll();
+    }
+});
+</script>
+        
+<!-- Bouton pour déclencher l'animation -->
+<section style="text-align: center; padding: 3rem 0;">
+    <button class="scroll-trigger-btn" onclick="showScroll()">
+        ✨ Ouvrir un Parchemin Mystérieux ✨
+    </button>
+</section>
     </footer>
 </body>
 </html>
